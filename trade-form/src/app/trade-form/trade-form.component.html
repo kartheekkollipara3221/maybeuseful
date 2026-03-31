@@ -1,0 +1,92 @@
+<form [formGroup]="tradeForm" (ngSubmit)="onSubmit()" class="trade-form-wrapper">
+
+  <!-- Header Fields -->
+  <div class="header-section">
+    <div class="field-row">
+      <label class="field-label required">Trade instructions input type</label>
+      <div class="field-control">
+        <select formControlName="inputType" class="select-input">
+          <option *ngFor="let t of inputTypes" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <label class="field-label required">Upload Attachments</label>
+      <div class="field-control attachment-control">
+        <label class="file-label">
+          <span class="choose-file-btn">Choose File</span>
+          <span class="file-name">{{ selectedFileName }}</span>
+          <input type="file" (change)="onFileChange($event)" hidden />
+        </label>
+        <button type="button" class="attach-btn" (click)="onAttach()">Attach</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trade Rows Table -->
+  <div class="table-container">
+    <table class="trade-table">
+      <thead>
+        <tr>
+          <th class="col-security">Security Name <span class="required-star">*</span></th>
+          <th class="col-identifier">Cusip / Ticker /Identifier <span class="required-star">*</span></th>
+          <th class="col-type">Type<span class="required-star">*</span></th>
+          <th class="col-quantity">Quantity / Amount <span class="required-star">*</span></th>
+          <th class="col-side">Side <span class="required-star">*</span></th>
+        </tr>
+      </thead>
+      <tbody formArrayName="rows">
+        <tr *ngFor="let row of rows.controls; let i = index" [formGroupName]="i">
+          <td class="col-security">
+            <textarea
+              formControlName="securityName"
+              class="textarea-input"
+              [class.invalid]="isInvalid(i, 'securityName')"
+            ></textarea>
+          </td>
+          <td class="col-identifier">
+            <textarea
+              formControlName="identifier"
+              class="textarea-input"
+              [class.invalid]="isInvalid(i, 'identifier')"
+            ></textarea>
+          </td>
+          <td class="col-type">
+            <select
+              formControlName="type"
+              class="select-input"
+              [class.invalid]="isInvalid(i, 'type')"
+            >
+              <option value=""></option>
+              <option *ngFor="let t of typeOptions" [value]="t">{{ t }}</option>
+            </select>
+          </td>
+          <td class="col-quantity">
+            <input
+              type="text"
+              formControlName="quantity"
+              class="text-input"
+              [class.invalid]="isInvalid(i, 'quantity')"
+            />
+          </td>
+          <td class="col-side">
+            <select
+              formControlName="side"
+              class="select-input"
+              [class.invalid]="isInvalid(i, 'side')"
+            >
+              <option value=""></option>
+              <option *ngFor="let s of sideOptions" [value]="s">{{ s }}</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="submit-btn">Submit</button>
+  </div>
+
+</form>
